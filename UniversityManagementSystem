@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+
+// Clase base Persona
+public abstract class Persona
+{
+    public int Id { get; set; }
+    public string Nombre { get; set; }
+
+    public Persona(int id, string nombre)
+    {
+        Id = id;
+        Nombre = nombre;
+    }
+}
+
+// Clase Profesor, hereda de Persona
+public class Profesor : Persona
+{
+    public double Salario { get; set; }
+    public List<Curso> Cursos { get; set; } = new List<Curso>();
+
+    public Profesor(int id, string nombre, double salario) : base(id, nombre)
+    {
+        Salario = salario;
+    }
+
+    public void AsignarCurso(Curso curso)
+    {
+        Cursos.Add(curso);
+    }
+}
+
+// Clase Estudiante, hereda de Persona
+public class Estudiante : Persona
+{
+    public string Direccion { get; set; }
+    public List<Curso> CursosInscritos { get; set; } = new List<Curso>();
+
+    public Estudiante(int id, string nombre, string direccion) : base(id, nombre)
+    {
+        Direccion = direccion;
+    }
+
+    public void InscribirCurso(Curso curso)
+    {
+        CursosInscritos.Add(curso);
+    }
+}
+
+// Clase Curso
+public class Curso
+{
+    public int Codigo { get; set; }
+    public string Nombre { get; set; }
+    public Escuela Escuela { get; private set; }
+
+    public Curso(int codigo, string nombre, Escuela escuela)
+    {
+        Codigo = codigo;
+        Nombre = nombre;
+        Escuela = escuela;
+    }
+}
+
+// Clase Escuela
+public class Escuela
+{
+    public string Nombre { get; set; }
+    public List<Profesor> Profesores { get; set; } = new List<Profesor>();
+
+    public Escuela(string nombre)
+    {
+        Nombre = nombre;
+    }
+
+    public void AgregarProfesor(Profesor profesor)
+    {
+        Profesores.Add(profesor);
+    }
+}
+
+// Clase Universidad para gestionar las entidades
+public class Universidad
+{
+    public List<Escuela> Escuelas { get; set; } = new List<Escuela>();
+    public List<Estudiante> Estudiantes { get; set; } = new List<Estudiante>();
+
+    public void AgregarEscuela(Escuela escuela)
+    {
+        Escuelas.Add(escuela);
+    }
+
+    public void RegistrarEstudiante(Estudiante estudiante)
+    {
+        Estudiantes.Add(estudiante);
+    }
+}
+
+// Ejemplo de uso del sistema de gestión de universidad
+public class Program
+{
+    public static void Main()
+    {
+        // Crear universidad
+        Universidad universidad = new Universidad();
+
+        // Crear escuela y profesores
+        Escuela ingenieria = new Escuela("Escuela de Ingeniería");
+        Profesor profesor1 = new Profesor(1, "Michlle Vargas", 3000);
+        ingenieria.AgregarProfesor(profesor1);
+
+        // Crear curso y asociarlo a la escuela y al profesor
+        Curso curso1 = new Curso(101, "Programación Orientada a Objetos", ingenieria);
+        profesor1.AsignarCurso(curso1);
+
+        // Crear estudiante y registrarlo en el curso
+        Estudiante estudiante1 = new Estudiante(1001, "Carlos López", "Calle 123");
+        estudiante1.InscribirCurso(curso1);
+
+        // Agregar escuela y estudiante a la universidad
+        universidad.AgregarEscuela(ingenieria);
+        universidad.RegistrarEstudiante(estudiante1);
+
+        Console.WriteLine("Sistema de Gestión de Universidad creado y configurado con éxito.");
+    }
+}
